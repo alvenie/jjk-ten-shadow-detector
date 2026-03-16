@@ -62,16 +62,16 @@ function isBottomHandShape(hand) {
     const ringPinkyDist = calculateDistance(ringTip, pinkyTip) // Bottom jaw
 
     // Constants for min or max thresholds (0.05 = roughly 5% of the screen distance)
-    const TOUCHING_THRESHOLD = 0.05;
-    const GAP_THRESHOLD = 0.08
+    const TOUCHING_THRESHOLD = 0.10;
+    const GAP_THRESHOLD = 0.15;
 
-    const isTopSnoutTouching = indexMiddleDist < TOUCHING_THRESHOLD
+    const isTopSnoutTouching = indexMiddleDist < TOUCHING_THRESHOLD;
 
-    const isBottomJawTouching = ringPinkyDist < TOUCHING_THRESHOLD
+    const isBottomJawTouching = ringPinkyDist < TOUCHING_THRESHOLD;
 
-    const isGap = middleRingDist > GAP_THRESHOLD
+    const isGap = middleRingDist > GAP_THRESHOLD;
 
-    return isTopSnoutTouching && isBottomJawTouching && isGap
+    return isTopSnoutTouching && isBottomJawTouching && isGap;
 }
 
 // Runs every time MediaPipe processes a frame
@@ -103,14 +103,14 @@ function onResults(results) {
 
             // 1. Check if hands are clasped together (distance between wrists is very small)
             const wristDistance = calculateDistance(hand1[0], hand2[0]);
-            const handsClasped = wristDistance < 0.2; // 20% of the screen distance
+            const handsClasped = wristDistance < 0.4; // 40% of the screen distance
             
             // 2. Does one hand match the top shape, and the other match the bottom
-            const combo1 = isTopHandShape(hand1) && isBottomHandShape(hand2)
-            const combo2 = isTopHandShape(hand2) && isBottomHandShape(hand1)
+            const combo1 = isTopHandShape(hand1) && isBottomHandShape(hand2);
+            const combo2 = isTopHandShape(hand2) && isBottomHandShape(hand1);
             
             if (handsClasped && (combo1 || combo2)){
-                isDivineDogs = true
+                isDivineDogs = true;
             }
         }
     }
