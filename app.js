@@ -25,6 +25,55 @@ function isFingerExtended(handLandmarks, tipIndex, pipIndex) {
     return calculateDistance(wrist, tip) > calculateDistance(wrist, pip)
 }
 
+// Helper function to define the specific hand shapes for Divine (Clenched Fist)
+function isTopHandShape(hand) {
+
+    // All fingers should be clenched
+    const indexUp = isFingerExtended(hand, 8, 6)
+    const middleUp = isFingerExtended(hand, 12, 10)
+    const ringUp = isFingerExtended(hand, 16, 14)
+    const pinkyUp = isFingerExtended(hand, 20, 18)
+
+    return !indexUp && !middleUp && !ringUp && !pinkyUp
+}
+
+// Helper function for the bottom hand (The Dog's Snout)
+function isBottomHandShape(hand) {
+
+    // Index, Middle, Ring, and Pinky all extended
+    const indexUp = isFingerExtended(hand, 8, 6)
+    const middleUp = isFingerExtended(hand, 12, 10)
+    const ringUp = isFingerExtended(hand, 16, 14)
+    const pinkyUp = isFingerExtended(hand, 20, 18)
+
+    if (!(indexUp && middleUp && ringUp && pinkyUp)) {
+        return false; // If they aren't all extended, it's not the right shape
+    }
+
+    // Gap Math
+    const indexTip = hand[8];
+    const middleTip = hand[12];
+    const ringTip = hand[16];
+    const pinkyTip = hand[20];
+
+    // Get the distance between the fingers
+    const indexMiddleDist = calculateDistance(indexTip, middleTip) // Top snout
+    const middleRingDist = calculateDistance(middleTip, ringTip) // The mouth
+    const ringPinkyDist = calculateDistance(ringTip, pinkyTip) // Bottom jaw
+
+    // Constants for min or max thresholds (0.05 = roughly 5% of the screen distance)
+    const TOUCHING_THRESHOLD = 0.05;
+    const GAP_THRESHOLD = 0.08
+
+    const isTopSnoutTouching = indexMiddleDist < TOUCHING_THRESHOLD
+
+    const isBottomJawTouching = ringPinkyDist < TOUCHING_THRESHOLD
+
+    const isGap = middleRingDist > GAP_THRESHOLD
+
+    return isTopSnoutTouching && isBottomJawTouching && isGap
+}
+
 // Runs every time MediaPipe processes a frame
 function onResults(results) {
     canvasCtx.save();
@@ -52,20 +101,16 @@ function onResults(results) {
             const hand1 = results.multiHandLandmarks[0];
             const hand2 = results.multiHandLandmarks[1];
 
-            const wrist1 = hand1[0];
-            const wrist2 = hand2[0];
-            const indexTip1 = hand1[8];
-            const indexTip2 = hand2[8];
-
             // 1. Check if hands are clasped together (distance between wrists is very small)
-            const wristDistance = calculateDistance(wrist1, wrist2);
-
-            // 2. Check if the index fingers are aligned parallel to each other (forming the ears)
-            const indexYDiff = Math.abs(indexTip1.y - indexTip2.y);
+            const wristDistance = calculateDistance(hand1[0], hand2[0]);
+            const handsClasped = wristDistance < 0.2; // 20% of the screen distance
             
-            // If the wrists are within a 15% distance of each other and fingers align
-            if (wristDistance < 0.15 && indexYDiff < 0.1) {
-                isDivineDogs = true;
+            // 2. Does one hand match the top shape, and the other match the bottom
+            const combo1 = isTopHandShape(hand1) && isBottomHandShape(hand2)
+            const combo2 = isTopHandShape(hand2) && isBottomHandShape(hand1)
+            
+            if (handsClasped && (combo1 || combo2)){
+                isDivineDogs = true
             }
         }
     }
