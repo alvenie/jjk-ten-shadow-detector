@@ -15,6 +15,16 @@ function calculateDistance(point1, point2) {
     );
 }
 
+// Helper function to check if a specific finger is extended
+// checking if the fingertip is further from the wrist than the middle joint (PIP)
+function isFingerExtended(handLandmarks, tipIndex, pipIndex) {
+    const wrist = handLandmarks[0]
+    const tip = handLandmarks[tipIndex]
+    const pip = handLandmarks[pipIndex]
+
+    return calculateDistance(wrist, tip) > calculateDistance(wrist, pip)
+}
+
 // Runs every time MediaPipe processes a frame
 function onResults(results) {
     canvasCtx.save();
