@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ten Shadows Technique: Hand Detection</title>
+    /* CSS Properties */
+    <style>
+        body { 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            background-color: #111; 
+            color: white; 
+            font-family: 'Courier New', Courier, monospace; 
+        }
+        h1 { margin-top: 30px; letter-spacing: 2px; }
+        .container { 
+            position: relative; 
+            width: 640px; 
+            height: 480px; 
+            margin-top: 20px; 
+            border: 2px solid #333; 
+            border-radius: 8px; 
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+        video, canvas { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            transform: scaleX(-1); /* Mirror the camera */
+        }
+        #summon-text { 
+            margin-top: 20px; 
+            font-size: 2em; 
+            font-weight: bold; 
+            height: 40px; 
+            text-transform: uppercase;
+        }
+    </style>
+    <!-- Google's MediaPipe Libraries using Content Delivery Network (CDNs)-->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <h1>Ten Shadows Technique</h1>
+    <div id="summon-text">Awaiting Sign...</div>
+
+    <div class="container">
+        <video id="video" autoplay playsinline></video> <!-- Captures the raw data from webcam -->
+        <canvas id="output_canvas"></canvas> <!-- Displays the processed image with hand landmarks -->
+    </div>
+
+    <script src="app.js"></script> <!-- Tells the HTML file to run the JavaScript logic -->
+</body>
+</html>
