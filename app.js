@@ -65,6 +65,7 @@ function isBottomHandShape(hand) {
     const TOUCHING_THRESHOLD = 0.10;
     const GAP_THRESHOLD = 0.15;
 
+    // Check if the fingers are in the correct positions
     const isTopSnoutTouching = indexMiddleDist < TOUCHING_THRESHOLD;
 
     const isBottomJawTouching = ringPinkyDist < TOUCHING_THRESHOLD;
@@ -94,7 +95,7 @@ function onResults(results) {
             drawLandmarks(canvasCtx, landmarks, {color: '#FFFFFF', lineWidth: 1, radius: 2});
         }
 
-        // --- DIVINE DOGS DETECTION LOGIC ---
+        // DIVINE DOGS DETECTION LOGIC
         // MediaPipe returns 21 landmarks per hand. Landmark 0 is the wrist, 8 is the index fingertip.
         // Coordinates (x,y,z) are normalized between 0.0 and 1.0.
         if (results.multiHandLandmarks.length === 2) {
