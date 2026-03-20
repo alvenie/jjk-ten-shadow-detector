@@ -21,7 +21,7 @@ This application bridges the gap between the Zenin Clan's inherited technique an
 
 ## Tech Stack
 
-* **Logic:** Vanilla JavaScript (ES6+)
+* **Logic:** Vanilla JavaScript
 * **AI Engine:** [Google MediaPipe Hands](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)
 * **Rendering:** HTML5 Canvas & CSS3
 * **Environment:** Visual Studio Code + Live Server
@@ -39,7 +39,7 @@ Because MediaPipe requires a secure context (HTTPS or Localhost) to access your 
 ### Installation & Launch
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/alvenie/jjk-ten-shadow-detector.git](https://github.com/alvenie/jjk-ten-shadow-detector.git)
+    git clone https://github.com/alvenie/jjk-ten-shadow-detector.git
     cd jjk-ten-shadow-detector
     ```
 2.  **Open in VS Code:**
