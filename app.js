@@ -120,7 +120,7 @@ function onResults(results) {
 
     // Update UI
     if (isDivineDogs) {
-        summonText.innerText = "Summoning: Divine Dogs! 🐺";
+        summonText.innerText = "Summoning: Divine Dogs!";
         summonText.style.color = "#4CAF50"; // Green
     } else {
         summonText.innerText = "Awaiting Sign...";
