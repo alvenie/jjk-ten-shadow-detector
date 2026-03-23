@@ -25,6 +25,7 @@ function isFingerExtended(handLandmarks, tipIndex, pipIndex) {
     return calculateDistance(wrist, tip) > calculateDistance(wrist, pip)
 }
 
+// DIVINE DOG LOGIC
 // Helper function to define the specific hand shapes for Divine (Clenched Fist)
 function isTopHandShape(hand) {
 
@@ -73,6 +74,27 @@ function isBottomHandShape(hand) {
     const isGap = middleRingDist > GAP_THRESHOLD;
 
     return isTopSnoutTouching && isBottomJawTouching && isGap;
+}
+
+// Toad (GAMA) Logic
+function isToadShape(hand1, hand2) {
+    // 1. Are the thumbs touching?
+    const thumbsTouching = calculateDistance(hand1[4], hand2[4]) < 0.08;
+    
+    // 2. Are the index fingers touching?
+    const indexesTouching = calculateDistance(hand1[8], hand2[8]) < 0.08;
+
+    // 3. Are the middle fingers touching?
+    const middlesTouching = calculateDistance(hands[12], hands[12] < 0.08);
+
+    // 3. Are the wrists pushed apart?
+    const wristsApart = calculateDistance(hand1[0], hand2[0]) > 0.12;
+
+    // 4. Is there an open gap between the thumbs and index fingers?
+    const hand1Gap = calculateDistance(hand1[4], hand1[8]) > 0.08;
+    const hand2Gap = calculateDistance(hand2[4], hand2[8]) > 0.08;
+
+    return thumbsTouching && indexesTouching && middlesTouching && wristsApart && hand1Gap && hand2Gap;
 }
 
 // Runs every time MediaPipe processes a frame
