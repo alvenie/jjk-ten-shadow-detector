@@ -78,23 +78,29 @@ function isBottomHandShape(hand) {
 
 // Toad (GAMA) Logic
 function isToadShape(hand1, hand2) {
-    // 1. Are the thumbs touching?
+    // Are the thumbs touching?
     const thumbsTouching = calculateDistance(hand1[4], hand2[4]) < 0.08;
     
-    // 2. Are the index fingers touching?
+    // Are the index fingers touching?
     const indexesTouching = calculateDistance(hand1[8], hand2[8]) < 0.08;
 
-    // 3. Are the middle fingers touching?
+    // Are the middle fingers touching?
     const middlesTouching = calculateDistance(hand1[12], hand2[12]) < 0.08;
 
-    // 3. Are the wrists pushed apart?
+    // Are the ring fingers touching the middle joint at hand11?
+    const ringPosition = calculateDistance(hand1[16], hand1[11] ) < 0.10 && calculateDistance(hand2[16], hand2[11]) < 0.10;
+
+    // Are the pinky fingers touching the ring joint at hand14?
+    const pinkyPosition = calculateDistance(hand1[20], hand1[14]) < 0.10 && calculateDistance(hand2[20], hand2[14]) < 0.10;
+
+    // Are the wrists pushed apart?
     const wristsApart = calculateDistance(hand1[0], hand2[0]) > 0.12;
 
-    // 4. Is there an open gap between the thumbs and index fingers?
+    // Is there an open gap between the thumbs and index fingers?
     const hand1Gap = calculateDistance(hand1[4], hand1[8]) > 0.08;
     const hand2Gap = calculateDistance(hand2[4], hand2[8]) > 0.08;
 
-    return thumbsTouching && indexesTouching && middlesTouching && wristsApart && hand1Gap && hand2Gap;
+    return thumbsTouching && indexesTouching && middlesTouching && ringPosition && pinkyPosition && wristsApart && hand1Gap && hand2Gap;
 }
 
 // Runs every time MediaPipe processes a frame
@@ -117,7 +123,7 @@ function onResults(results) {
                 drawLandmarks(canvasCtx, landmarks, {color: '#FFFFFF', lineWidth: 1, radius: 2});
             }
 
-            // DIVINE DOGS DETECTION LOGIC
+            // Handsign DETECTION LOGIC
             // MediaPipe returns 21 landmarks per hand. Landmark 0 is the wrist, 8 is the index fingertip.
             // Coordinates (x,y,z) are normalized between 0.0 and 1.0.
             if (results.multiHandLandmarks.length === 2) {
