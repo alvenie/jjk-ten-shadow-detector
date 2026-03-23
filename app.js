@@ -85,7 +85,7 @@ function isToadShape(hand1, hand2) {
     const indexesTouching = calculateDistance(hand1[8], hand2[8]) < 0.08;
 
     // 3. Are the middle fingers touching?
-    const middlesTouching = calculateDistance(hands[12], hands[12] < 0.08);
+    const middlesTouching = calculateDistance(hand1[12], hand2[12]) < 0.08;
 
     // 3. Are the wrists pushed apart?
     const wristsApart = calculateDistance(hand1[0], hand2[0]) > 0.12;
@@ -108,41 +108,52 @@ function onResults(results) {
     canvasCtx.scale(-1, 1);
     canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
-    let isDivineDogs = false;
-
-    if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+    let detectedSign = null;
+    try {
+        if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         // Draw the skeletal landmarks on your hands
-        for (const landmarks of results.multiHandLandmarks) {
-            drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#555555', lineWidth: 2});
-            drawLandmarks(canvasCtx, landmarks, {color: '#FFFFFF', lineWidth: 1, radius: 2});
-        }
+            for (const landmarks of results.multiHandLandmarks) {
+                drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#555555', lineWidth: 2});
+                drawLandmarks(canvasCtx, landmarks, {color: '#FFFFFF', lineWidth: 1, radius: 2});
+            }
 
-        // DIVINE DOGS DETECTION LOGIC
-        // MediaPipe returns 21 landmarks per hand. Landmark 0 is the wrist, 8 is the index fingertip.
-        // Coordinates (x,y,z) are normalized between 0.0 and 1.0.
-        if (results.multiHandLandmarks.length === 2) {
-            const hand1 = results.multiHandLandmarks[0];
-            const hand2 = results.multiHandLandmarks[1];
+            // DIVINE DOGS DETECTION LOGIC
+            // MediaPipe returns 21 landmarks per hand. Landmark 0 is the wrist, 8 is the index fingertip.
+            // Coordinates (x,y,z) are normalized between 0.0 and 1.0.
+            if (results.multiHandLandmarks.length === 2) {
+                const hand1 = results.multiHandLandmarks[0];
+                const hand2 = results.multiHandLandmarks[1];
 
-            // 1. Check if hands are clasped together (distance between wrists is very small)
-            const wristDistance = calculateDistance(hand1[0], hand2[0]);
-            const handsClasped = wristDistance < 0.4; // 40% of the screen distance
-            
-            // 2. Does one hand match the top shape, and the other match the bottom
-            const combo1 = isTopHandShape(hand1) && isBottomHandShape(hand2);
-            const combo2 = isTopHandShape(hand2) && isBottomHandShape(hand1);
-            
-            if (handsClasped && (combo1 || combo2)){
-                isDivineDogs = true;
+                // 1. Check if hands are clasped together (distance between wrists is very small)
+                const wristDistance = calculateDistance(hand1[0], hand2[0]);
+                const handsClasped = wristDistance < 0.4; // 40% of the screen distance
+                
+                // 2. Does one hand match the top shape, and the other match the bottom
+                const combo1 = isTopHandShape(hand1) && isBottomHandShape(hand2);
+                const combo2 = isTopHandShape(hand2) && isBottomHandShape(hand1);
+                
+                // Check for divine dogs
+                if (handsClasped && (combo1 || combo2)){
+                    detectedSign = "DIVINE_DOGS";
+                }
+                // Check for Toad
+                else if (isToadShape(hand1, hand2)) {
+                    detectedSign = "TOAD";
+                }
             }
         }
+    } catch (error) {
+        console.error("Error processing hand landmarks:", error);
     }
 
     canvasCtx.restore();
 
     // Update UI
-    if (isDivineDogs) {
+    if (detectedSign === "DIVINE_DOGS") {
         summonText.innerText = "Summoning: Divine Dogs!";
+        summonText.style.color = "#FF9800"; // Orange
+    } else if (detectedSign === "TOAD") {
+        summonText.innerText = "Summoning: Toad!";
         summonText.style.color = "#4CAF50"; // Green
     } else {
         summonText.innerText = "Awaiting Sign...";
