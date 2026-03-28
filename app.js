@@ -78,6 +78,8 @@ function isBottomHandShape(hand) {
 
 // Toad (GAMA) Logic
 function isToadShape(hand1, hand2) {
+
+    // Check if the fingers are in the correct position for both hands.
     // Are the thumbs touching?
     const thumbsTouching = calculateDistance(hand1[4], hand2[4]) < 0.08;
     
