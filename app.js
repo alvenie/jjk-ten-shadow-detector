@@ -111,11 +111,12 @@ function onResults(results) {
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     
     // Draw the camera frame
-    // Note: We mirror the canvas horizontally so it acts like a mirror
+    // We mirror the canvas horizontally so it acts like a mirror
     canvasCtx.translate(canvasElement.width, 0);
     canvasCtx.scale(-1, 1);
     canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
+    // Set default detected sign to null at the start of each frame
     let detectedSign = null;
     try {
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
