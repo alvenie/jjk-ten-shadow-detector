@@ -10,10 +10,10 @@ This application bridges the gap between the Zenin Clan's inherited technique an
 
 ### Currently Supported Shikigami
 * **Divine Dogs (玉犬):** Interlocked fingers with thumbs raised.
+* **Toad (蝦蟇):** Specific interlocking of pinky fingers.
 
 ### In development
 * **Nue (鵺):** Crossed wrists with palms splayed like wings.
-* **Toad (蝦蟇):** Specific interlocking of pinky fingers.
 * **Max Elephant (満象):** Vertical stacking of palms to mimic a trunk.
 * **Mahoraga (魔虚羅):** The Eight-Handled Sword Divergent Sila Divine General.
 
